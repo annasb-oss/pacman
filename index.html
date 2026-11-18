@@ -171,8 +171,9 @@ function update(){
  // Detecta colisão na mesma casa e quando Pac-Man e fantasma cruzam no mesmo passo.
  for(const g of ghosts){
   const sameTile=g.x===player.x&&g.y===player.y;
+  const enteredGhostTile=player.x===g.prevX&&player.y===g.prevY;
   const crossedPaths=player.prevX===g.x&&player.prevY===g.y&&player.x===g.prevX&&player.y===g.prevY;
-  if(sameTile||crossedPaths){
+  if(sameTile||enteredGhostTile||crossedPaths){
    if(power>0){
     score+=200;g.x=9;g.y=9;g.prevX=9;g.prevY=9;tone(180,.1);hud();
    }else{loseLife();return}
