@@ -68,7 +68,7 @@ const BASE=[
 ].map(s=>s.replaceAll(' ','#'));
 const DIR={left:{x:-1,y:0},right:{x:1,y:0},up:{x:0,y:-1},down:{x:0,y:1}};
 const OPP={left:'right',right:'left',up:'down',down:'up'};
-const SPEED={easy:10,normal:9,hard:8};
+const SPEED={easy:5,normal:4,hard:3};
 let grid,player,ghosts,fruits=[],score=0,lives=3,level=1,state='menu',power=0,frame=0,sound=true,audio=null,stepCounter=0;
 let best=Number(localStorage.getItem('neonPacmanBest')||0);
 function cloneMap(){return BASE.map(row=>row.split(''))}
@@ -162,7 +162,7 @@ function update(){
  // A partida fica aguardando a primeira direção: jogador e fantasmas não andam sozinhos.
  if(!player.next&&!player.dir)return;
  frame++;stepCounter++;
- const pace=Math.max(6,SPEED[$('difficulty').value]-Math.floor((level-1)/4));
+ const pace=Math.max(2,SPEED[$('difficulty').value]-Math.floor((level-1)/5));
  if(stepCounter<pace)return;stepCounter=0;
  player.mouth=(player.mouth+1)%10;
  player.prevX=player.x;player.prevY=player.y;
@@ -187,7 +187,7 @@ function update(){
  if(power>0)power--;
  if(!remaining()){level++;newBoard();hud();tone(740,.2)}
 }
-function movementProgress(){const pace=Math.max(6,SPEED[$('difficulty').value]-Math.floor((level-1)/4));return Math.min(1,stepCounter/pace)}
+function movementProgress(){const pace=Math.max(2,SPEED[$('difficulty').value]-Math.floor((level-1)/5));return Math.min(1,stepCounter/pace)}
 function drawPacman(){
  const t=movementProgress(),x=(player.prevX+(player.x-player.prevX)*t)*TILE+12,y=(player.prevY+(player.y-player.prevY)*t)*TILE+12;
  const angle={right:0,down:Math.PI/2,left:Math.PI,up:-Math.PI/2}[player.dir]||0;
