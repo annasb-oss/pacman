@@ -5,21 +5,36 @@
 <meta name="theme-color" content="#000000">
 <title>Pac-Man — Arcade Clássico</title>
 <style>
-:root{color-scheme:dark;--bg:#000;--panel:#050505;--line:#1717c8;--blue:#2121de;--cyan:#00e5ff;--gold:#ffff00;--muted:#d8d8d8}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#000;color:#fff;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,sans-serif;display:flex;justify-content:center;padding:26px 14px}
-main{width:min(100%,540px)}header{text-align:center;margin-bottom:12px}.kicker{display:none}h1{margin:7px 0 3px;font-family:ui-monospace,Consolas,monospace;font-size:clamp(2.4rem,8vw,4.5rem);letter-spacing:.13em;color:#ffff00;text-shadow:none}header p{margin:0;color:#bdbdbd;font-size:.82rem}.project-note{max-width:540px;margin:8px auto 0!important;color:#888;font-size:.68rem!important;line-height:1.45} .panel{position:relative} .metric{transition:border-color .2s,transform .2s} .metric:hover{border-color:#b7eee2;transform:translateY(-1px)} .ranking li:first-child b{color:#ffe29a} canvas{image-rendering:pixelated} .dialog button.primary{box-shadow:0 3px 0 #b8b800} .dialog button.primary:hover{filter:brightness(1.12);transform:translateY(-1px)} .kicker{letter-spacing:.24em} .settings{color:#d6c9e4} .settings select{background:#111;color:#fff;border-color:#3535ff} .actions button{min-width:104px} button{transition:transform .16s ease,filter .16s ease} button:active{transform:translateY(1px) scale(.98)}
-.shell{display:block}.panel{background:#050505;border:1px solid #2424d8;border-radius:12px;padding:12px;box-shadow:0 0 24px #1515a833}.hud{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.metric{background:#090909;border:1px solid #2525b8;border-radius:6px;padding:8px 10px}.metric small{display:block;font-size:.61rem;color:#b8b8b8;letter-spacing:.12em;text-transform:uppercase}.metric strong{display:block;font-size:1.2rem;font-variant-numeric:tabular-nums}
-.board-wrap{position:relative;max-width:456px;margin:auto}canvas{display:block;width:100%;height:auto;aspect-ratio:19/21;background:#000;border:2px solid #174bd8;border-radius:5px;box-shadow:0 0 5px #075bff,0 0 16px #075bff55;touch-action:none}
-.actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:13px}button,select{font:inherit;font-family:ui-monospace,Consolas,monospace;color:#eef4ff;background:#111;border:1px solid #3535ff;border-radius:5px;padding:10px 14px;font-weight:750;cursor:pointer}button:hover{filter:brightness(1.18)}button:focus-visible,select:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}button.primary{background:#ffff00;border-color:#ffff00;color:#000}.settings{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:11px;color:#bbb;font-size:.8rem}.settings select{padding:7px 10px;font-size:.8rem}
-aside h2{font-size:.78rem;letter-spacing:.16em;color:#b7eee2;text-transform:uppercase;margin:2px 0 12px}.ranking{list-style:none;padding:0;margin:0}.ranking li{display:flex;justify-content:space-between;border-bottom:1px solid #23365e;padding:9px 2px;font-size:.84rem}.ranking li b{color:var(--gold)}.aside-copy{font-size:.81rem;line-height:1.6;color:#9eafd1}.legend{display:grid;gap:9px;margin:12px 0 20px;font-size:.78rem;color:#b6c5e3}.legend span{display:flex;align-items:center;gap:9px}.dot{width:9px;height:9px;border-radius:50%;background:#f7eac1}.dot.power{width:12px;height:12px;background:#fff;border:2px solid var(--cyan)}.dot.ghost{background:#ff5e86;border-radius:4px;width:12px;height:12px}
-.dpad{display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(2,42px);gap:5px;justify-content:center;margin-top:14px}.dpad button{padding:0;font-size:1.05rem;touch-action: none}.dpad button:nth-child(1){grid-column:2}.dpad button:nth-child(2){grid-column:1;grid-row:2}.dpad button:nth-child(3){grid-column:2;grid-row:2}.dpad button:nth-child(4){grid-column:3;grid-row:2}
-.hint{text-align:center;color:#8296c0;font-size:.72rem;margin:10px 0 0}.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#000d;border-radius:5px;padding:18px;text-align:center}.overlay[hidden]{display:none}.dialog{width:min(100%,290px);background:#050505;border:2px solid #2121de;border-radius:3px;padding:24px 20px;box-shadow:none}.dialog h2{font-family:ui-monospace,Consolas,monospace;font-size:1.5rem;color:#ffff00;margin:0 0 8px;letter-spacing:.08em}.dialog p{font-size:.83rem;line-height:1.5;color:#ddd;margin:0 0 16px}.dialog button{width:100%}.dialog .sub{margin-top:8px;background:transparent}.dialog h2{font-size:1.65rem;letter-spacing:.1em}.dialog{backdrop-filter:blur(8px)}.foot{display:none}
-@media(max-width:740px){.shell{grid-template-columns:1fr}.panel{padding:10px}.hud{gap:5px}.metric{padding:7px}.metric strong{font-size:1rem}.side{display:none}.aside-copy{font-size:.76rem}}
-@media(max-width:390px){body{padding:18px 8px}.hud small{font-size:.54rem}.metric strong{font-size:.92rem}.side{display:none}}
+:root{color-scheme:dark;--black:#000;--blue:#174bd8;--yellow:#ffe500;--white:#f5f5f5;--muted:#9aa4b8}
+*{box-sizing:border-box}html{background:var(--black)}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 8%,#08112b 0,#02040c 34%,#000 72%);color:var(--white);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;justify-content:center;padding:30px 16px 36px}
+main{width:min(100%,520px)}header{text-align:center;margin:0 auto 20px}
+.kicker{display:inline-block;margin:0 0 8px;color:#7f9fff;font:700 .65rem/1.2 ui-monospace,Consolas,monospace;letter-spacing:.24em;text-transform:uppercase}
+h1{margin:0;color:var(--yellow);font:900 clamp(2.5rem,8vw,4rem)/1 ui-monospace,Consolas,monospace;letter-spacing:.16em;text-shadow:0 0 18px #ffe50024}
+header p{margin:9px 0 0;color:#c4cce0;font-size:.83rem}.project-note{max-width:460px;margin:10px auto 0!important;color:#78839b;font-size:.68rem!important;line-height:1.5}
+.shell{display:block}.panel{position:relative;padding:14px;background:linear-gradient(180deg,#050914 0%,#02040a 100%);border:1px solid #173b9b;border-radius:14px;box-shadow:0 0 0 1px #0b1a40,0 14px 40px #000b}
+.hud{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 auto 14px;max-width:456px}
+.metric{min-width:0;padding:9px 10px;background:#080d1b;border:1px solid #172b60;border-radius:8px}
+.metric small{display:block;margin-bottom:4px;color:#8292b5;font-size:.59rem;font-weight:750;letter-spacing:.14em;text-transform:uppercase}
+.metric strong{display:block;color:#fff;font:800 clamp(.95rem,3vw,1.2rem)/1.1 ui-monospace,Consolas,monospace;font-variant-numeric:tabular-nums}.metric:first-child strong{color:var(--yellow)}
+.board-wrap{position:relative;width:min(100%,456px);margin:0 auto}
+canvas{display:block;width:100%;height:auto;aspect-ratio:19/21;background:#000;border:2px solid #174bd8;border-radius:7px;box-shadow:0 0 0 1px #0b1b4a,0 0 14px #075bff33;image-rendering:pixelated;touch-action:none}
+.actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:15px auto 0}
+button,select{font:700 .76rem/1 ui-monospace,Consolas,monospace;color:#e8edff;background:#0b1224;border:1px solid #29468e;border-radius:7px;padding:11px 15px;cursor:pointer;transition:background .15s,border-color .15s,transform .15s}
+button:hover,select:hover{background:#111d39;border-color:#5278d9}button:active{transform:translateY(1px)}
+button:focus-visible,select:focus-visible{outline:2px solid #ffe500;outline-offset:3px}
+button.primary{background:var(--yellow);border-color:var(--yellow);color:#090909;font-weight:900;letter-spacing:.08em}button.primary:hover{background:#fff06a;border-color:#fff06a}
+.settings{display:flex;align-items:center;justify-content:center;gap:10px;margin:13px auto 0;color:#9aa8c6;font-size:.73rem}.settings select{padding:8px 11px;font-size:.72rem;background:#080d1b}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#000c;border-radius:6px;padding:18px;text-align:center}.overlay[hidden]{display:none}
+.dialog{width:min(100%,300px);padding:25px 22px;background:#050a18;border:1px solid #2854c8;border-radius:12px;box-shadow:0 12px 36px #000b,0 0 22px #174bd822}
+.dialog h2{margin:0 0 9px;color:var(--yellow);font:900 1.55rem/1.1 ui-monospace,Consolas,monospace;letter-spacing:.12em}
+.dialog p{margin:0 0 17px;color:#c4cce0;font-size:.82rem;line-height:1.55}.dialog button{width:100%;min-height:42px}.dialog .sub{margin-top:8px;background:transparent}
+@media(max-width:420px){body{padding:18px 9px 24px}header{margin-bottom:14px}.panel{padding:9px;border-radius:10px}.hud{gap:5px;margin-bottom:10px}.metric{padding:8px 6px}.metric small{font-size:.52rem;letter-spacing:.09em}.metric strong{font-size:.92rem}.actions{gap:6px}.actions button{padding:10px 11px;font-size:.68rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body><main>
-<header><h1>PAC-MAN</h1><p>1 jogador · Use as setas ou WASD</p><p class="project-note">Projeto independente criado como exercício de estudo e prática de programação. Não é um site oficial do PAC-MAN e não possui vínculo com seus criadores ou detentores dos direitos.</p></header>
+<header><span class="kicker">Arcade · Projeto independente</span><h1>PAC-MAN</h1><p>1 jogador · Use as setas ou WASD</p><p class="project-note">Projeto independente criado como exercício de estudo e prática de programação. Não é um site oficial do PAC-MAN e não possui vínculo com seus criadores ou detentores dos direitos.</p></header>
 <div class="shell">
 <section class="panel">
 <div class="hud">
@@ -68,7 +83,7 @@ const BASE=[
 ].map(s=>s.replaceAll(' ','#'));
 const DIR={left:{x:-1,y:0},right:{x:1,y:0},up:{x:0,y:-1},down:{x:0,y:1}};
 const OPP={left:'right',right:'left',up:'down',down:'up'};
-const SPEED={easy:5,normal:4,hard:3};
+const SPEED={easy:8,normal:7,hard:6};
 let grid,player,ghosts,fruits=[],score=0,lives=3,level=1,state='menu',power=0,frame=0,sound=true,audio=null,stepCounter=0;
 let best=Number(localStorage.getItem('neonPacmanBest')||0);
 function cloneMap(){return BASE.map(row=>row.split(''))}
@@ -162,7 +177,7 @@ function update(){
  // A partida fica aguardando a primeira direção: jogador e fantasmas não andam sozinhos.
  if(!player.next&&!player.dir)return;
  frame++;stepCounter++;
- const pace=Math.max(2,SPEED[$('difficulty').value]-Math.floor((level-1)/5));
+ const pace=Math.max(4,SPEED[$('difficulty').value]-Math.floor((level-1)/5));
  if(stepCounter<pace)return;stepCounter=0;
  player.mouth=(player.mouth+1)%10;
  player.prevX=player.x;player.prevY=player.y;
@@ -187,7 +202,7 @@ function update(){
  if(power>0)power--;
  if(!remaining()){level++;newBoard();hud();tone(740,.2)}
 }
-function movementProgress(){const pace=Math.max(2,SPEED[$('difficulty').value]-Math.floor((level-1)/5));return Math.min(1,stepCounter/pace)}
+function movementProgress(){const pace=Math.max(4,SPEED[$('difficulty').value]-Math.floor((level-1)/5));return Math.min(1,stepCounter/pace)}
 function drawPacman(){
  const t=movementProgress(),x=(player.prevX+(player.x-player.prevX)*t)*TILE+12,y=(player.prevY+(player.y-player.prevY)*t)*TILE+12;
  const angle={right:0,down:Math.PI/2,left:Math.PI,up:-Math.PI/2}[player.dir]||0;
