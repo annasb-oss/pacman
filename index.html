@@ -2,37 +2,53 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#080b18"><title>Pac-Man — Arcade</title>
+<meta name="theme-color" content="#070b1b">
+<title>Pac-Man | Neon Maze Arcade</title>
 <style>
-:root{color-scheme:dark;--bg:#080b18;--panel:#11182b;--line:#263454;--cyan:#52e5ff;--yellow:#ffdf45;--pink:#ff5b9d}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#17264b 0,#080b18 58%);color:#eef4ff;font-family:Inter,system-ui,Segoe UI,sans-serif;display:flex;justify-content:center;padding:28px 14px}
-main{width:min(100%,900px)}header{text-align:center;margin-bottom:22px}header .eyebrow{color:var(--cyan);letter-spacing:.28em;font-size:.7rem;font-weight:800}h1{font-size:clamp(2.2rem,7vw,4rem);margin:7px 0;letter-spacing:.12em;color:var(--yellow);text-shadow:0 0 24px #ffdf4566}header p{color:#9eacc9;margin:0}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:16px;align-items:start}.game-card,.side-card{background:#0d1426d9;border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 18px 60px #0005}
-.hud{display:flex;justify-content:space-between;gap:10px;margin:0 2px 12px}.stat small{display:block;color:#8798bb;text-transform:uppercase;font-size:.65rem;letter-spacing:.12em}.stat strong{font-size:1.25rem;color:white;font-variant-numeric:tabular-nums}
-canvas{display:block;width:100%;height:auto;aspect-ratio:19/21;background:#050916;border-radius:10px;border:1px solid #1e2c4c;image-rendering:pixelated;touch-action:none}
-.actions{display:flex;justify-content:center;gap:9px;margin-top:13px;flex-wrap:wrap}button{border:1px solid #344568;background:#182440;color:#f5f8ff;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer}button.primary{background:var(--yellow);color:#171522;border-color:var(--yellow)}button:hover{filter:brightness(1.12)}button:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
-.side-card h2{font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;margin:2px 0 14px;color:var(--cyan)}.side-card p,.help{font-size:.82rem;line-height:1.55;color:#a8b5d0}.ranking{padding:0;list-style:none;margin:0}.ranking li{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #263454;color:#dce5fa;font-size:.85rem}.ranking li span:last-child{color:var(--yellow);font-variant-numeric:tabular-nums}.empty{color:#7788aa!important}
-.controls{display:grid;grid-template-columns:repeat(3,44px);gap:5px;justify-content:center;margin:14px auto 0}.controls button{padding:9px 0;font-size:1.1rem}.controls button:nth-child(1){grid-column:2}.controls button:nth-child(2){grid-column:1;grid-row:2}.controls button:nth-child(3){grid-column:2;grid-row:2}.controls button:nth-child(4){grid-column:3;grid-row:2}
-.overlay{position:relative;margin-top:-58%;height:0;display:flex;justify-content:center;pointer-events:none}.overlay span{pointer-events:none;background:#080b18eF;border:1px solid #42557d;border-radius:12px;padding:12px 18px;text-align:center;font-weight:800;color:var(--yellow);height:max-content;box-shadow:0 8px 30px #0009}
-footer{text-align:center;color:#68799e;font-size:.72rem;margin:18px 0}
-@media(max-width:700px){.layout{grid-template-columns:1fr}.side-card{order:2}.game-card{padding:10px}.side-card{padding:14px}.side-card .help{display:none}}
-</style></head>
+:root{color-scheme:dark;--bg:#070b1b;--panel:#101a35;--line:#263d70;--blue:#3f79ff;--cyan:#61e8ff;--gold:#ffe15a;--muted:#91a4ce}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -10%,#1a3470 0,#0b1430 38%,#070b1b 75%);color:#f5f7ff;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,sans-serif;display:flex;justify-content:center;padding:26px 14px}
+main{width:min(100%,980px)}header{text-align:center;margin-bottom:20px}.kicker{font-size:.68rem;letter-spacing:.34em;color:var(--cyan);font-weight:900}h1{margin:7px 0 3px;font-size:clamp(2.4rem,8vw,4.5rem);letter-spacing:.13em;color:var(--gold);text-shadow:0 0 24px #ffe15a55}header p{margin:0;color:var(--muted);font-size:.92rem}
+.shell{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:16px;align-items:start}.panel{background:linear-gradient(145deg,#111d3b,#0b1228);border:1px solid var(--line);border-radius:20px;padding:15px;box-shadow:0 22px 70px #0008}.hud{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.metric{background:#080f24;border:1px solid #1b2c53;border-radius:11px;padding:8px 10px}.metric small{display:block;font-size:.61rem;color:#8fa2cc;letter-spacing:.12em;text-transform:uppercase}.metric strong{display:block;font-size:1.2rem;font-variant-numeric:tabular-nums}
+.board-wrap{position:relative;max-width:456px;margin:auto}canvas{display:block;width:100%;height:auto;aspect-ratio:19/21;background:#030817;border:1px solid #263e79;border-radius:12px;box-shadow:0 0 32px #1a4ed322;touch-action:none}
+.actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:13px}button,select{font:inherit;color:#eef4ff;background:#19284b;border:1px solid #38558c;border-radius:10px;padding:10px 14px;font-weight:750;cursor:pointer}button:hover{filter:brightness(1.18)}button:focus-visible,select:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}button.primary{background:var(--gold);border-color:var(--gold);color:#11172b}.settings{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:11px;color:#9eb0d5;font-size:.8rem}.settings select{padding:7px 10px;font-size:.8rem}
+aside h2{font-size:.78rem;letter-spacing:.16em;color:var(--cyan);text-transform:uppercase;margin:2px 0 12px}.ranking{list-style:none;padding:0;margin:0}.ranking li{display:flex;justify-content:space-between;border-bottom:1px solid #23365e;padding:9px 2px;font-size:.84rem}.ranking li b{color:var(--gold)}.aside-copy{font-size:.81rem;line-height:1.6;color:#9eafd1}.legend{display:grid;gap:9px;margin:12px 0 20px;font-size:.78rem;color:#b6c5e3}.legend span{display:flex;align-items:center;gap:9px}.dot{width:9px;height:9px;border-radius:50%;background:#f7eac1}.dot.power{width:12px;height:12px;background:#fff;border:2px solid var(--cyan)}.dot.ghost{background:#ff5e86;border-radius:4px;width:12px;height:12px}
+.dpad{display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(2,42px);gap:5px;justify-content:center;margin-top:14px}.dpad button{padding:0;font-size:1.05rem;touch-action: none}.dpad button:nth-child(1){grid-column:2}.dpad button:nth-child(2){grid-column:1;grid-row:2}.dpad button:nth-child(3){grid-column:2;grid-row:2}.dpad button:nth-child(4){grid-column:3;grid-row:2}
+.hint{text-align:center;color:#8296c0;font-size:.72rem;margin:10px 0 0}.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#030817c9;border-radius:12px;padding:18px;text-align:center}.overlay[hidden]{display:none}.dialog{width:min(100%,290px);background:linear-gradient(145deg,#142650,#0b1430);border:1px solid #4565a5;border-radius:16px;padding:22px 18px;box-shadow:0 15px 50px #000b}.dialog h2{font-size:1.5rem;color:var(--gold);margin:0 0 8px;letter-spacing:.08em}.dialog p{font-size:.83rem;line-height:1.5;color:#aebee0;margin:0 0 16px}.dialog button{width:100%}.dialog .sub{margin-top:8px;background:transparent}.foot{text-align:center;color:#647aa7;font-size:.7rem;margin:17px 0}
+@media(max-width:740px){.shell{grid-template-columns:1fr}.panel{padding:10px}.hud{gap:5px}.metric{padding:7px}.metric strong{font-size:1rem}.side{display:grid;grid-template-columns:1fr 1fr;gap:12px}.side section:first-child{grid-row:span 2}.aside-copy{font-size:.76rem}}
+@media(max-width:390px){body{padding:18px 8px}.hud small{font-size:.54rem}.metric strong{font-size:.92rem}.side{grid-template-columns:1fr}}
+</style>
+</head>
 <body><main>
-<header><div class="eyebrow">CLASSIC ARCADE EXPERIENCE</div><h1>PAC-MAN</h1><p>Coma os pontos. Fuja dos fantasmas. Faça seu recorde.</p></header>
-<div class="layout"><section class="game-card">
-<div class="hud"><div class="stat"><small>Pontuação</small><strong id="score">000000</strong></div><div class="stat"><small>Vidas</small><strong id="lives">3</strong></div><div class="stat"><small>Fase</small><strong id="level">1</strong></div></div>
-<canvas id="game" width="456" height="504" aria-label="Tabuleiro do Pac-Man"></canvas>
-<div class="actions"><button class="primary" id="start">Iniciar jogo</button><button id="pause">Pausar</button><button id="sound">Som: ligado</button></div>
-<div class="controls" aria-label="Controles direcionais"><button data-dir="up" aria-label="Cima">▲</button><button data-dir="left" aria-label="Esquerda">◀</button><button data-dir="down" aria-label="Baixo">▼</button><button data-dir="right" aria-label="Direita">▶</button></div>
-<p class="help" style="text-align:center">Use as setas ou WASD para mover · Espaço para pausar · Enter para iniciar</p>
-</section><aside class="side-card"><h2>Melhores pontuações</h2><ol class="ranking" id="ranking"></ol><p>Seu ranking fica salvo neste navegador. Cada jogador mantém seus próprios recordes neste dispositivo.</p><h2 style="margin-top:22px">Como jogar</h2><p class="help">Recolha todos os pontos para avançar de fase. Os pontos grandes deixam os fantasmas vulneráveis por alguns segundos. Evite encostar neles quando estiverem em sua forma normal.</p></aside></div>
-<footer>Uma releitura independente inspirada nos clássicos jogos de labirinto.</footer>
+<header><div class="kicker">NEON MAZE ARCADE</div><h1>PAC-MAN</h1><p>Entre no labirinto. Colete tudo. Supere seu próprio recorde.</p></header>
+<div class="shell">
+<section class="panel">
+<div class="hud">
+<div class="metric"><small>Pontuação</small><strong id="score">000000</strong></div>
+<div class="metric"><small>Recorde</small><strong id="best">000000</strong></div>
+<div class="metric"><small>Vidas</small><strong id="lives">3</strong></div>
+<div class="metric"><small>Fase</small><strong id="level">1</strong></div>
+</div>
+<div class="board-wrap">
+<canvas id="game" width="456" height="504" aria-label="Labirinto do Pac-Man"></canvas>
+<div class="overlay" id="overlay"><div class="dialog"><h2 id="overlayTitle">PAC-MAN</h2><p id="overlayText">Pronto para encarar o labirinto? Use as setas ou WASD para jogar.</p><button class="primary" id="play">Começar partida</button><button class="sub" id="resume" hidden>Continuar</button></div></div>
+</div>
+<div class="actions"><button id="pause">Pausar</button><button id="restart">Reiniciar</button><button id="sound">Som: ligado</button></div>
+<div class="settings">Dificuldade <select id="difficulty"><option value="easy">Tranquila</option><option value="normal" selected>Clássica</option><option value="hard">Desafio</option></select></div>
+<div class="dpad" aria-label="Controles na tela"><button data-dir="up" aria-label="Cima">▲</button><button data-dir="left" aria-label="Esquerda">◀</button><button data-dir="down" aria-label="Baixo">▼</button><button data-dir="right" aria-label="Direita">▶</button></div>
+<p class="hint">Setas / WASD para mover · Espaço para pausar · Enter para começar</p>
+</section>
+<aside class="panel side">
+<section><h2>Hall da fama</h2><ol class="ranking" id="ranking"></ol><p class="aside-copy">Os cinco melhores resultados ficam guardados neste navegador.</p></section>
+<section><h2>Itens do labirinto</h2><div class="legend"><span><i class="dot"></i> Ponto: +10</span><span><i class="dot power"></i> Super ponto: +50</span><span><i class="dot ghost"></i> Fantasma vulnerável: +200</span></div><h2>Estratégia</h2><p class="aside-copy">Os super pontos deixam os fantasmas vulneráveis por alguns instantes. Cada fase aumenta o ritmo. Os fantasmas tentam cercar você: mude de direção e use os corredores a seu favor.</p></section>
+</aside>
+</div><footer class="foot">NEON MAZE ARCADE · Projeto independente de jogo para navegador</footer>
 </main>
 <script>
 (()=>{
-const canvas=document.getElementById('game'),ctx=canvas.getContext('2d'),$=id=>document.getElementById(id);
-const tile=24,cols=19,rows=21;
-const map=[
+'use strict';
+const $=id=>document.getElementById(id),canvas=$('game'),ctx=canvas.getContext('2d');
+const TILE=24,COLS=19,ROWS=21;
+const BASE=[
 "###################",
 "#........#........#",
 "#.##.###.#.###.##.#",
@@ -43,50 +59,155 @@ const map=[
 "####.###.#.###.####",
 "####.#.......#.####",
 "####.#.## ##.#.####",
-"..................."
+"...................",
 "####.#.#####.#.####",
 "####.#.......#.####",
 "####.#.#####.#.####",
 "#........#........#",
 "#.##.###.#.###.##.#",
-"#o.#.....P.....#.o#",
+"#o.#.....#.....#.o#",
 "##.#.#.#####.#.#.##",
 "#....#...#...#....#",
 "#.######.#.######.#",
 "###################"
-].map(r=>r.replaceAll(" ","."));
-let grid,player,ghosts,score=0,lives=3,level=1,mode='ready',power=0,tick=0,sound=true,audio,highScore=Number(localStorage.getItem('pacmanHighScore')||0);
-const dirs={left:{x:-1,y:0},right:{x:1,y:0},up:{x:0,y:-1},down:{x:0,y:1}};
-let queued='left';
-function resetBoard(){grid=map.map(r=>r.split(''));player={x:9,y:16,dir:'left',next:'left',mouth:0};ghosts=[{x:9,y:9,color:'#ff5b73',dir:'left',home:0},{x:8,y:10,color:'#52e5ff',dir:'up',home:1},{x:10,y:10,color:'#ff9de2',dir:'down',home:2},{x:9,y:11,color:'#ffae45',dir:'left',home:3}];}
-function wall(x,y){return x<0||y<0||x>=cols||y>=rows||grid[y][x]==='#'}
-function beep(f=440,d=.045){if(!sound)return;try{audio??=new(window.AudioContext||window.webkitAudioContext)();let o=audio.createOscillator(),g=audio.createGain();o.frequency.value=f;g.gain.value=.025;o.connect(g);g.connect(audio.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);o.stop(audio.currentTime+d)}catch{}}
-function updateHud(){$('score').textContent=String(score).padStart(6,'0');$('lives').textContent=lives;$('level').textContent=level;if(score>highScore){highScore=score;localStorage.setItem('pacmanHighScore',String(highScore))}}
-function saveScore(){let list=JSON.parse(localStorage.getItem('pacmanScores')||'[]');list.push({score,name:'Você'});list.sort((a,b)=>b.score-a.score);localStorage.setItem('pacmanScores',JSON.stringify(list.slice(0,5)));renderRanking()}
-function renderRanking(){let list=JSON.parse(localStorage.getItem('pacmanScores')||'[]');$('ranking').innerHTML=list.length?list.map((v,i)=>'<li><span>'+(i+1)+'. '+v.name+'</span><span>'+v.score+'</span></li>').join(''):'<li class="empty">Nenhum recorde ainda</li>'}
-function start(){if(mode==='over'||mode==='won'){score=0;lives=3;level=1;resetBoard();updateHud()}mode='playing';$('start').textContent='Recomeçar';}
-function end(){mode='over';saveScore();$('start').textContent='Jogar novamente'}
-function moveEntity(e,dir){let d=dirs[dir];if(!d)return false;let nx=e.x+d.x,ny=e.y+d.y;if(wall(nx,ny))return false;e.x=nx;e.y=ny;return true}
-function step(){if(mode!=='playing')return;tick++;player.mouth=(player.mouth+1)%12;
-if(tick%5===0){if(moveEntity(player,player.next))player.dir=player.next;else moveEntity(player,player.dir);
-let cell=grid[player.y][player.x];if(cell==='.'||cell==='o'){score+=cell==='o'?50:10;grid[player.y][player.x]=' ';if(cell==='o'){power=65;beep(880,.12)}else beep(520,.025);updateHud()}
-for(let g of ghosts){let choices=Object.keys(dirs).filter(d=>!wall(g.x+dirs[d].x,g.y+dirs[d].y));if(choices.length){let reverse={left:'right',right:'left',up:'down',down:'up'}[g.dir];let valid=choices.filter(d=>d!==reverse);if(!valid.length)valid=choices;let target=valid[Math.floor(Math.random()*valid.length)];if(Math.random()<.65)g.dir=target;moveEntity(g,g.dir)}}
+].map(s=>s.replaceAll(' ','#'));
+const DIR={left:{x:-1,y:0},right:{x:1,y:0},up:{x:0,y:-1},down:{x:0,y:1}};
+const OPP={left:'right',right:'left',up:'down',down:'up'};
+const SPEED={easy:7,normal:5,hard:4};
+let grid,player,ghosts,score=0,lives=3,level=1,state='menu',power=0,frame=0,sound=true,audio=null,stepCounter=0;
+let best=Number(localStorage.getItem('neonPacmanBest')||0);
+function cloneMap(){return BASE.map(row=>row.split(''))}
+function resetActors(){
+ player={x:9,y:16,dir:'left',next:'left',mouth:0};
+ ghosts=[
+  {x:9,y:9,dir:'left',color:'#ff557d',mode:0},
+  {x:8,y:10,dir:'up',color:'#52dfff',mode:1},
+  {x:10,y:10,dir:'down',color:'#ff91dc',mode:2},
+  {x:9,y:11,dir:'left',color:'#ffb34f',mode:3}
+ ];
 }
-if(power>0)power--;
-for(let g of ghosts){if(g.x===player.x&&g.y===player.y){if(power>0){score+=200;g.x=9;g.y=9;beep(180,.1);updateHud()}else{lives--;updateHud();beep(110,.25);if(lives<=0){end();return}player.x=9;player.y=16;ghosts.forEach((a,i)=>{a.x=9+(i%2?1:-1);a.y=9+Math.floor(i/2)});return}}}
-if(grid.every(r=>r.every(c=>c!==' .'&&c!=='.'&&c!=='o'))){level++;resetBoard();power=0;updateHud();beep(700,.2)}
+function newBoard(){grid=cloneMap();resetActors();power=0;stepCounter=0}
+function wall(x,y){return x<0||y<0||x>=COLS||y>=ROWS||grid[y][x]==='#'}
+function hud(){
+ $('score').textContent=String(score).padStart(6,'0');
+ $('best').textContent=String(best).padStart(6,'0');
+ $('lives').textContent=String(lives);$('level').textContent=String(level);
 }
-function draw(){ctx.fillStyle='#050916';ctx.fillRect(0,0,canvas.width,canvas.height);
-for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){let c=grid[y][x],px=x*tile,py=y*tile;if(c==='#'){ctx.fillStyle='#102a70';ctx.fillRect(px+1,py+1,tile-2,tile-2);ctx.strokeStyle='#3158b7';ctx.lineWidth=1.2;ctx.strokeRect(px+3,py+3,tile-6,tile-6)}else if(c==='.'||c==='o'){ctx.beginPath();ctx.fillStyle=c==='o'?'#fff0a6':'#f5e8c5';ctx.arc(px+12,py+12,c==='o'?5:2,0,Math.PI*2);ctx.fill()}}
-if(player){ctx.save();ctx.translate(player.x*tile+12,player.y*tile+12);let angle={right:0,down:Math.PI/2,left:Math.PI,up:-Math.PI/2}[player.dir]||0;ctx.rotate(angle);ctx.fillStyle='#ffdf45';ctx.beginPath();let a=.18+(player.mouth<6?player.mouth:12-player.mouth)*.075;ctx.moveTo(0,0);ctx.arc(0,0,10,a,Math.PI*2-a);ctx.closePath();ctx.fill();ctx.restore()}
-for(let g of ghosts){let x=g.x*tile+12,y=g.y*tile+12;ctx.fillStyle=power?'#3557c7':g.color;ctx.beginPath();ctx.arc(x,y-1,9,Math.PI,0);ctx.lineTo(x+9,y+9);ctx.lineTo(x+4,y+6);ctx.lineTo(x,y+9);ctx.lineTo(x-4,y+6);ctx.lineTo(x-9,y+9);ctx.closePath();ctx.fill();ctx.fillStyle='white';ctx.beginPath();ctx.arc(x-3,y-2,3,0,7);ctx.arc(x+3,y-2,3,0,7);ctx.fill();ctx.fillStyle='#17203b';ctx.beginPath();ctx.arc(x-2,y-2,1.5,0,7);ctx.arc(x+4,y-2,1.5,0,7);ctx.fill()}
-if(mode!=='playing'){ctx.fillStyle='#050916bb';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.textAlign='center';ctx.fillStyle='#ffdf45';ctx.font='bold 25px system-ui';ctx.fillText(mode==='over'?'FIM DE JOGO':mode==='paused'?'PAUSADO':mode==='won'?'VOCÊ VENCEU!':'PRONTO PARA JOGAR',canvas.width/2,canvas.height/2-5);ctx.fillStyle='#e5edff';ctx.font='13px system-ui';ctx.fillText(mode==='over'?'Clique em Jogar novamente':'Pressione Iniciar ou Enter',canvas.width/2,canvas.height/2+22)}
+function showOverlay(title,message,button='Começar partida',resume=false){
+ $('overlayTitle').textContent=title;$('overlayText').textContent=message;$('play').textContent=button;
+ $('resume').hidden=!resume;$('overlay').hidden=false;
 }
-function loop(){step();draw();requestAnimationFrame(loop)}
-function setDir(d){if(dirs[d]&&player&&mode!=='over'&&mode!=='won')player.next=d}
-document.addEventListener('keydown',e=>{let k={ArrowLeft:'left',a:'left',ArrowRight:'right',d:'right',ArrowUp:'up',w:'up',ArrowDown:'down',s:'down'}[e.key];if(k){e.preventDefault();setDir(k)}if(e.key===' '){e.preventDefault();mode=mode==='playing'?'paused':mode==='paused'?'playing':mode;$('pause').textContent=mode==='paused'?'Continuar':'Pausar'}if(e.key==='Enter'&&mode!=='playing')start()});
-document.querySelectorAll('[data-dir]').forEach(b=>{b.addEventListener('pointerdown',()=>setDir(b.dataset.dir))});
-$('start').onclick=start;$('pause').onclick=()=>{if(mode==='playing')mode='paused';else if(mode==='paused')mode='playing';$('pause').textContent=mode==='paused'?'Continuar':'Pausar'};$('sound').onclick=()=>{sound=!sound;$('sound').textContent='Som: '+(sound?'ligado':'desligado')};
-resetBoard();updateHud();renderRanking();loop();
+function hideOverlay(){$('overlay').hidden=true}
+function tone(freq=440,duration=.05){
+ if(!sound)return;
+ try{audio??=new(window.AudioContext||window.webkitAudioContext)();const osc=audio.createOscillator(),gain=audio.createGain();osc.type='square';osc.frequency.value=freq;gain.gain.setValueAtTime(.018,audio.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audio.currentTime+duration);osc.connect(gain);gain.connect(audio.destination);osc.start();osc.stop(audio.currentTime+duration)}catch{}
+}
+function renderRanking(){
+ const scores=JSON.parse(localStorage.getItem('neonPacmanScores')||'[]');
+ $('ranking').innerHTML=scores.length?scores.slice(0,5).map((v,i)=>'<li><span>'+(i+1)+'. '+v.name+'</span><b>'+v.score+'</b></li>').join(''):'<li style="color:#8194bc">Ainda sem pontuações</li>';
+}
+function saveScore(){
+ const scores=JSON.parse(localStorage.getItem('neonPacmanScores')||'[]');
+ scores.push({name:'Jogador',score});scores.sort((a,b)=>b.score-a.score);
+ localStorage.setItem('neonPacmanScores',JSON.stringify(scores.slice(0,5)));
+ if(score>best){best=score;localStorage.setItem('neonPacmanBest',String(best))}
+ renderRanking();hud();
+}
+function start(newGame=false){
+ if(newGame||state==='menu'||state==='over'||state==='won'){score=0;lives=3;level=1;newBoard();hud()}
+ state='playing';hideOverlay();
+}
+function finish(){
+ state='over';saveScore();showOverlay('FIM DE JOGO','Sua pontuação foi '+score+'. Que tal tentar superar seu recorde?','Jogar novamente');
+}
+function tryMove(entity,dir){
+ const d=DIR[dir];if(!d||wall(entity.x+d.x,entity.y+d.y))return false;
+ entity.x+=d.x;entity.y+=d.y;return true;
+}
+function pathDistance(sx,sy,tx,ty){
+ const queue=[[sx,sy,0]],seen=new Set([sx+','+sy]);
+ for(let i=0;i<queue.length;i++){const [x,y,n]=queue[i];if(x===tx&&y===ty)return n;
+  for(const d of Object.values(DIR)){const nx=x+d.x,ny=y+d.y,key=nx+','+ny;if(!wall(nx,ny)&&!seen.has(key)){seen.add(key);queue.push([nx,ny,n+1])}}
+ }return 999;
+}
+function ghostMove(g){
+ let options=Object.keys(DIR).filter(d=>!wall(g.x+DIR[d].x,g.y+DIR[d].y));
+ if(options.length>1)options=options.filter(d=>d!==OPP[g.dir]);
+ if(!options.length)return;
+ const difficulty=$('difficulty').value;
+ if(power>0){g.dir=options[Math.floor(Math.random()*options.length)];tryMove(g,g.dir);return}
+ const chaseChance=difficulty==='hard'?.88:difficulty==='easy'?.38:.68;
+ if(Math.random()<chaseChance){
+  options.sort((a,b)=>{
+   const da=DIR[a],db=DIR[b];
+   const ta=pathDistance(g.x+da.x,g.y+da.y,player.x,player.y);
+   const tb=pathDistance(g.x+db.x,g.y+db.y,player.x,player.y);
+   return ta-tb;
+  });
+  g.dir=options[0];
+ }else g.dir=options[Math.floor(Math.random()*options.length)];
+ tryMove(g,g.dir);
+}
+function loseLife(){
+ lives--;hud();tone(100,.28);
+ if(lives<=0){finish();return}
+ player.x=9;player.y=16;player.dir='left';player.next='left';
+ ghosts[0].x=9;ghosts[0].y=9;ghosts[1].x=8;ghosts[1].y=10;ghosts[2].x=10;ghosts[2].y=10;ghosts[3].x=9;ghosts[3].y=11;
+ power=0;
+}
+function remaining(){return grid.some(row=>row.some(c=>c==='.'||c==='o'))}
+function update(){
+ if(state!=='playing')return;
+ frame++;stepCounter++;
+ const pace=Math.max(2,SPEED[$('difficulty').value]-Math.floor((level-1)/3));
+ if(stepCounter<pace)return;stepCounter=0;
+ player.mouth=(player.mouth+1)%10;
+ if(!tryMove(player,player.next))tryMove(player,player.dir);else player.dir=player.next;
+ const cell=grid[player.y][player.x];
+ if(cell==='.'||cell==='o'){score+=cell==='o'?50:10;grid[player.y][player.x]=' ';if(cell==='o'){power=70;tone(880,.12)}else tone(500,.025);if(score>best){best=score;localStorage.setItem('neonPacmanBest',String(best))}hud()}
+ for(let i=0;i<ghosts.length;i++){const g=ghosts[i];if(frame%(i===0?1:1)===0)ghostMove(g)}
+ if(power>0)power--;
+ for(const g of ghosts){if(g.x===player.x&&g.y===player.y){if(power>0){score+=200;g.x=9;g.y=9;tone(180,.1);hud()}else{loseLife();return}}}
+ if(!remaining()){level++;newBoard();hud();tone(740,.2)}
+}
+function drawPacman(){
+ const x=player.x*TILE+12,y=player.y*TILE+12;
+ const angle={right:0,down:Math.PI/2,left:Math.PI,up:-Math.PI/2}[player.dir]||0;
+ const opening=player.mouth<5?player.mouth*.12:(9-player.mouth)*.12;
+ ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.fillStyle='#ffe15a';ctx.shadowColor='#ffe15a';ctx.shadowBlur=12;
+ ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,10,opening,Math.PI*2-opening);ctx.closePath();ctx.fill();ctx.restore();
+}
+function drawGhost(g){
+ const x=g.x*TILE+12,y=g.y*TILE+12,body=power>0?(power<18&&Math.floor(frame/5)%2?'#f4f6ff':'#4267e8'):g.color;
+ ctx.save();ctx.fillStyle=body;ctx.shadowColor=body;ctx.shadowBlur=power>0?10:5;
+ ctx.beginPath();ctx.arc(x,y-1,9,Math.PI,0);ctx.lineTo(x+9,y+9);ctx.lineTo(x+4,y+6);ctx.lineTo(x,y+9);ctx.lineTo(x-4,y+6);ctx.lineTo(x-9,y+9);ctx.closePath();ctx.fill();ctx.shadowBlur=0;
+ if(power<=0){ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(x-3,y-2,2.7,3.5,0,0,Math.PI*2);ctx.ellipse(x+3,y-2,2.7,3.5,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#172345';ctx.beginPath();ctx.arc(x-2,y-1,1.4,0,7);ctx.arc(x+4,y-1,1.4,0,7);ctx.fill()}
+ ctx.restore();
+}
+function draw(){
+ ctx.fillStyle='#030817';ctx.fillRect(0,0,canvas.width,canvas.height);
+ for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
+  const c=grid[y][x],px=x*TILE,py=y*TILE;
+  if(c==='#'){ctx.fillStyle='#0b2058';ctx.fillRect(px+1,py+1,TILE-2,TILE-2);ctx.strokeStyle='#3167d5';ctx.lineWidth=1.3;ctx.strokeRect(px+3,py+3,TILE-6,TILE-6)}
+  else if(c==='.'||c==='o'){ctx.beginPath();ctx.fillStyle=c==='o'?'#fff':'#f8e9c4';ctx.shadowColor=c==='o'?'#fff':'transparent';ctx.shadowBlur=c==='o'?8:0;ctx.arc(px+12,py+12,c==='o'?5:2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
+ }
+ drawPacman();ghosts.forEach(drawGhost);
+}
+function loop(){update();draw();requestAnimationFrame(loop)}
+function setDirection(d){if(DIR[d]&&state==='playing')player.next=d}
+document.addEventListener('keydown',e=>{
+ const key=e.key.toLowerCase(),d=({arrowleft:'left',a:'left',arrowright:'right',d:'right',arrowup:'up',w:'up',arrowdown:'down',s:'down'})[key];
+ if(d){e.preventDefault();setDirection(d)}
+ if(key===' '){e.preventDefault();if(state==='playing'){state='paused';showOverlay('PAUSADO','A partida está pausada. Respire e prepare sua próxima jogada.','',true)}else if(state==='paused'){state='playing';hideOverlay()}}
+ if(key==='enter'&&(state==='menu'||state==='over'||state==='won'))start();
+});
+document.querySelectorAll('[data-dir]').forEach(btn=>{btn.addEventListener('pointerdown',e=>{e.preventDefault();setDirection(btn.dataset.dir)})});
+$('play').addEventListener('click',()=>start(state==='over'||state==='won'));
+$('resume').addEventListener('click',()=>{state='playing';hideOverlay()});
+$('pause').addEventListener('click',()=>{if(state==='playing'){state='paused';showOverlay('PAUSADO','Sua partida está guardada.','',true)}else if(state==='paused'){state='playing';hideOverlay()}});
+$('restart').addEventListener('click',()=>{state='menu';start(true)});
+$('sound').addEventListener('click',()=>{sound=!sound;$('sound').textContent='Som: '+(sound?'ligado':'desligado');if(sound)tone(660)});
+newBoard();hud();renderRanking();showOverlay('PAC-MAN','Quatro fantasmas, um labirinto e uma missão: recolher todos os pontos.','Começar partida');loop();
 })();
-</script></body></html>
+</script>
+</body></html>
