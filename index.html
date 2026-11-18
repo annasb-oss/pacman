@@ -186,9 +186,9 @@ function drawPacman(){
  const t=movementProgress(),x=(player.prevX+(player.x-player.prevX)*t)*TILE+12,y=(player.prevY+(player.y-player.prevY)*t)*TILE+12;
  const angle={right:0,down:Math.PI/2,left:Math.PI,up:-Math.PI/2}[player.dir]||0;
  const opening=player.dir?(.04+Math.abs(Math.sin(player.mouth*Math.PI/5))*.34):.04;
+ ctx.save();ctx.translate(x,y);ctx.rotate(angle);
  const gold=ctx.createRadialGradient(-3,-5,1,0,0,12);
  gold.addColorStop(0,'#fff98a');gold.addColorStop(.42,'#ffe900');gold.addColorStop(1,'#e5a900');
- ctx.save();ctx.translate(x,y);ctx.rotate(angle);
  ctx.shadowColor='#ffe900';ctx.shadowBlur=8;ctx.fillStyle=gold;
  ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,10.5,opening,Math.PI*2-opening);ctx.closePath();ctx.fill();
  ctx.shadowBlur=0;
