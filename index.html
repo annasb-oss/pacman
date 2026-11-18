@@ -7,7 +7,7 @@
 <style>
 :root{color-scheme:dark;--bg:#000;--panel:#050505;--line:#1717c8;--blue:#2121de;--cyan:#00e5ff;--gold:#ffff00;--muted:#d8d8d8}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;background:#000;color:#fff;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,sans-serif;display:flex;justify-content:center;padding:26px 14px}
-main{width:min(100%,540px)}header{text-align:center;margin-bottom:12px}.kicker{display:none}h1{margin:7px 0 3px;font-size:clamp(2.4rem,8vw,4.5rem);letter-spacing:.13em;color:#ffff00;text-shadow:0 0 16px #ffff0055}header p{margin:0;color:#bdbdbd;font-size:.82rem} .panel{position:relative} .metric{transition:border-color .2s,transform .2s} .metric:hover{border-color:#b7eee2;transform:translateY(-1px)} .ranking li:first-child b{color:#ffe29a} canvas{image-rendering:auto} .dialog button.primary{box-shadow:0 3px 0 #b8b800} .dialog button.primary:hover{filter:brightness(1.12);transform:translateY(-1px)} .kicker{letter-spacing:.24em} .settings{color:#d6c9e4} .settings select{background:#111;color:#fff;border-color:#3535ff} .actions button{min-width:104px} button{transition:transform .16s ease,filter .16s ease} button:active{transform:translateY(1px) scale(.98)}
+main{width:min(100%,540px)}header{text-align:center;margin-bottom:12px}.kicker{display:none}h1{margin:7px 0 3px;font-size:clamp(2.4rem,8vw,4.5rem);letter-spacing:.13em;color:#ffff00;text-shadow:0 0 16px #ffff0055}header p{margin:0;color:#bdbdbd;font-size:.82rem}.project-note{max-width:540px;margin:8px auto 0!important;color:#888;font-size:.68rem!important;line-height:1.45} .panel{position:relative} .metric{transition:border-color .2s,transform .2s} .metric:hover{border-color:#b7eee2;transform:translateY(-1px)} .ranking li:first-child b{color:#ffe29a} canvas{image-rendering:auto} .dialog button.primary{box-shadow:0 3px 0 #b8b800} .dialog button.primary:hover{filter:brightness(1.12);transform:translateY(-1px)} .kicker{letter-spacing:.24em} .settings{color:#d6c9e4} .settings select{background:#111;color:#fff;border-color:#3535ff} .actions button{min-width:104px} button{transition:transform .16s ease,filter .16s ease} button:active{transform:translateY(1px) scale(.98)}
 .shell{display:block}.panel{background:#050505;border:1px solid #2424d8;border-radius:12px;padding:12px;box-shadow:0 0 24px #1515a833}.hud{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.metric{background:#090909;border:1px solid #2525b8;border-radius:6px;padding:8px 10px}.metric small{display:block;font-size:.61rem;color:#b8b8b8;letter-spacing:.12em;text-transform:uppercase}.metric strong{display:block;font-size:1.2rem;font-variant-numeric:tabular-nums}
 .board-wrap{position:relative;max-width:456px;margin:auto}canvas{display:block;width:100%;height:auto;aspect-ratio:19/21;background:#000;border:2px solid #2121de;border-radius:5px;box-shadow:0 0 20px #1717c855;touch-action:none}
 .actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:13px}button,select{font:inherit;color:#eef4ff;background:#111;border:1px solid #3535ff;border-radius:5px;padding:10px 14px;font-weight:750;cursor:pointer}button:hover{filter:brightness(1.18)}button:focus-visible,select:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}button.primary{background:#ffff00;border-color:#ffff00;color:#000}.settings{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:11px;color:#bbb;font-size:.8rem}.settings select{padding:7px 10px;font-size:.8rem}
@@ -19,7 +19,7 @@ aside h2{font-size:.78rem;letter-spacing:.16em;color:#b7eee2;text-transform:uppe
 </style>
 </head>
 <body><main>
-<header><h1>PAC-MAN</h1><p>1 jogador · Use as setas ou WASD</p></header>
+<header><h1>PAC-MAN</h1><p>1 jogador · Use as setas ou WASD</p><p class="project-note">Projeto independente criado como exercício de estudo e prática de programação. Não é um site oficial do PAC-MAN e não possui vínculo com seus criadores ou detentores dos direitos.</p></header>
 <div class="shell">
 <section class="panel">
 <div class="hud">
@@ -263,7 +263,7 @@ $('resume').addEventListener('click',()=>{state='playing';hideOverlay()});
 $('pause').addEventListener('click',()=>{if(state==='playing'){state='paused';showOverlay('PAUSADO','Sua partida está guardada.','',true)}else if(state==='paused'){state='playing';hideOverlay()}});
 $('restart').addEventListener('click',()=>{state='menu';start(true)});
 $('sound').addEventListener('click',()=>{sound=!sound;$('sound').textContent='Som: '+(sound?'ligado':'desligado');if(sound)tone(660)});
-newBoard();hud();showOverlay('PAC-MAN','Use as setas ou WASD para controlar o Pac-Man. Os fantasmas começam a se mover junto com você!','Começar partida');loop();
+newBoard();hud();showOverlay('PAC-MAN','Use as setas ou WASD para controlar o Pac-Man. Os fantasmas começam a se mover quando você inicia a partida.','Começar partida');loop();
 })();
 </script>
 </body></html>
