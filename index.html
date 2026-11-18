@@ -55,14 +55,14 @@ const map=[
 "#.######.#.######.#",
 "###################"
 ].map(r=>r.replaceAll(" ","."));
-let grid,player,ghosts,score=0,lives=3,level=1,mode='ready',power=0,tick=0,sound=true,audio;
+let grid,player,ghosts,score=0,lives=3,level=1,mode='ready',power=0,tick=0,sound=true,audio,highScore=Number(localStorage.getItem('pacmanHighScore')||0);
 const dirs={left:{x:-1,y:0},right:{x:1,y:0},up:{x:0,y:-1},down:{x:0,y:1}};
 let queued='left';
 function resetBoard(){grid=map.map(r=>r.split(''));player={x:9,y:16,dir:'left',next:'left',mouth:0};ghosts=[{x:9,y:9,color:'#ff5b73',dir:'left',home:0},{x:8,y:10,color:'#52e5ff',dir:'up',home:1},{x:10,y:10,color:'#ff9de2',dir:'down',home:2},{x:9,y:11,color:'#ffae45',dir:'left',home:3}];}
 function wall(x,y){return x<0||y<0||x>=cols||y>=rows||grid[y][x]==='#'}
 function beep(f=440,d=.045){if(!sound)return;try{audio??=new(window.AudioContext||window.webkitAudioContext)();let o=audio.createOscillator(),g=audio.createGain();o.frequency.value=f;g.gain.value=.025;o.connect(g);g.connect(audio.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);o.stop(audio.currentTime+d)}catch{}}
-function updateHud(){$('score').textContent=String(score).padStart(6,'0');$('lives').textContent=lives;$('level').textContent=level}
-function saveScore(){let list=JSON.parse(localStorage.getItem('pacmanScores')||'[]');list.push({score,name:'Jogador'});list.sort((a,b)=>b.score-a.score);localStorage.setItem('pacmanScores',JSON.stringify(list.slice(0,5)));renderRanking()}
+function updateHud(){$('score').textContent=String(score).padStart(6,'0');$('lives').textContent=lives;$('level').textContent=level;if(score>highScore){highScore=score;localStorage.setItem('pacmanHighScore',String(highScore))}}
+function saveScore(){let list=JSON.parse(localStorage.getItem('pacmanScores')||'[]');list.push({score,name:'Você'});list.sort((a,b)=>b.score-a.score);localStorage.setItem('pacmanScores',JSON.stringify(list.slice(0,5)));renderRanking()}
 function renderRanking(){let list=JSON.parse(localStorage.getItem('pacmanScores')||'[]');$('ranking').innerHTML=list.length?list.map((v,i)=>'<li><span>'+(i+1)+'. '+v.name+'</span><span>'+v.score+'</span></li>').join(''):'<li class="empty">Nenhum recorde ainda</li>'}
 function start(){if(mode==='over'||mode==='won'){score=0;lives=3;level=1;resetBoard();updateHud()}mode='playing';$('start').textContent='Recomeçar';}
 function end(){mode='over';saveScore();$('start').textContent='Jogar novamente'}
@@ -83,10 +83,10 @@ for(let g of ghosts){let x=g.x*tile+12,y=g.y*tile+12;ctx.fillStyle=power?'#3557c
 if(mode!=='playing'){ctx.fillStyle='#050916bb';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.textAlign='center';ctx.fillStyle='#ffdf45';ctx.font='bold 25px system-ui';ctx.fillText(mode==='over'?'FIM DE JOGO':mode==='paused'?'PAUSADO':mode==='won'?'VOCÊ VENCEU!':'PRONTO PARA JOGAR',canvas.width/2,canvas.height/2-5);ctx.fillStyle='#e5edff';ctx.font='13px system-ui';ctx.fillText(mode==='over'?'Clique em Jogar novamente':'Pressione Iniciar ou Enter',canvas.width/2,canvas.height/2+22)}
 }
 function loop(){step();draw();requestAnimationFrame(loop)}
-function setDir(d){if(dirs[d])player.next=d}
-document.addEventListener('keydown',e=>{let k={ArrowLeft:'left',a:'left',ArrowRight:'right',d:'right',ArrowUp:'up',w:'up',ArrowDown:'down',s:'down'}[e.key];if(k){e.preventDefault();setDir(k)}if(e.key===' '){e.preventDefault();mode=mode==='playing'?'paused':mode==='paused'?'playing':mode}if(e.key==='Enter'&&mode!=='playing')start()});
+function setDir(d){if(dirs[d]&&player&&mode!=='over'&&mode!=='won')player.next=d}
+document.addEventListener('keydown',e=>{let k={ArrowLeft:'left',a:'left',ArrowRight:'right',d:'right',ArrowUp:'up',w:'up',ArrowDown:'down',s:'down'}[e.key];if(k){e.preventDefault();setDir(k)}if(e.key===' '){e.preventDefault();mode=mode==='playing'?'paused':mode==='paused'?'playing':mode;$('pause').textContent=mode==='paused'?'Continuar':'Pausar'}if(e.key==='Enter'&&mode!=='playing')start()});
 document.querySelectorAll('[data-dir]').forEach(b=>{b.addEventListener('pointerdown',()=>setDir(b.dataset.dir))});
-$('start').onclick=start;$('pause').onclick=()=>{if(mode==='playing')mode='paused';else if(mode==='paused')mode='playing'};$('sound').onclick=()=>{sound=!sound;$('sound').textContent='Som: '+(sound?'ligado':'desligado')};
+$('start').onclick=start;$('pause').onclick=()=>{if(mode==='playing')mode='paused';else if(mode==='paused')mode='playing';$('pause').textContent=mode==='paused'?'Continuar':'Pausar'};$('sound').onclick=()=>{sound=!sound;$('sound').textContent='Som: '+(sound?'ligado':'desligado')};
 resetBoard();updateHud();renderRanking();loop();
 })();
 </script></body></html>
