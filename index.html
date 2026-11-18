@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#070b1b">
-<title>Pac-Man | Neon Maze Arcade</title>
+<title>Pac-Man — Doce Arcade</title>
 <style>
 :root{color-scheme:dark;--bg:#171329;--panel:#28213f;--line:#66547f;--blue:#a58bd4;--cyan:#a7e7df;--gold:#ffe29a;--muted:#c7bddb}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -10%,#55436f 0,#29223f 42%,#171329 82%);color:#fff9f2;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,sans-serif;display:flex;justify-content:center;padding:26px 14px}
-main{width:min(100%,980px)}header{text-align:center;margin-bottom:20px}.kicker{font-size:.68rem;letter-spacing:.34em;color:#b7eee2;font-weight:900}h1{margin:7px 0 3px;font-size:clamp(2.4rem,8vw,4.5rem);letter-spacing:.13em;color:#ffe29a;text-shadow:0 0 22px #ffc7d955}header p{margin:0;color:var(--muted);font-size:.92rem}
+main{width:min(100%,980px)}header{text-align:center;margin-bottom:20px}.kicker{font-size:.68rem;letter-spacing:.34em;color:#b7eee2;font-weight:900}h1{margin:7px 0 3px;font-size:clamp(2.4rem,8vw,4.5rem);letter-spacing:.13em;color:#ffe29a;text-shadow:0 0 22px #ffc7d955}header p{margin:0;color:var(--muted);font-size:.92rem} .kicker{letter-spacing:.24em} .settings{color:#d6c9e4} .settings select{background:#403451;color:#fff8f1;border-color:#8d79a5} .actions button{min-width:104px} button{transition:transform .16s ease,filter .16s ease} button:active{transform:translateY(1px) scale(.98)}
 .shell{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:16px;align-items:start}.panel{background:linear-gradient(145deg,#352b50,#241d39);border:1px solid #76628f;border-radius:25px;padding:15px;box-shadow:0 18px 50px #09061766}.hud{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.metric{background:#211b35;border:1px solid #55476e;border-radius:15px;padding:8px 10px}.metric small{display:block;font-size:.61rem;color:#8fa2cc;letter-spacing:.12em;text-transform:uppercase}.metric strong{display:block;font-size:1.2rem;font-variant-numeric:tabular-nums}
 .board-wrap{position:relative;max-width:456px;margin:auto}canvas{display:block;width:100%;height:auto;aspect-ratio:19/21;background:#211b35;border:1px solid #79668e;border-radius:18px;box-shadow:0 0 30px #f4c5e322;touch-action:none}
 .actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:13px}button,select{font:inherit;color:#eef4ff;background:#55466f;border:1px solid #8d79a5;border-radius:14px;padding:10px 14px;font-weight:750;cursor:pointer}button:hover{filter:brightness(1.18)}button:focus-visible,select:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}button.primary{background:#ffe29a;border-color:#ffe8b8;color:#49364f}.settings{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:11px;color:#9eb0d5;font-size:.8rem}.settings select{padding:7px 10px;font-size:.8rem}
@@ -30,17 +30,17 @@ aside h2{font-size:.78rem;letter-spacing:.16em;color:#b7eee2;text-transform:uppe
 </div>
 <div class="board-wrap">
 <canvas id="game" width="456" height="504" aria-label="Labirinto do Pac-Man"></canvas>
-<div class="overlay" id="overlay"><div class="dialog"><h2 id="overlayTitle">PAC-MAN</h2><p id="overlayText">Pronto para encarar o labirinto? Use as setas ou WASD para jogar.</p><button class="primary" id="play">Começar partida</button><button class="sub" id="resume" hidden>Continuar</button></div></div>
+<div class="overlay" id="overlay"><div class="dialog"><h2 id="overlayTitle">PAC-MAN</h2><p id="overlayText">Pronto para jogar? Depois de começar, use as setas ou WASD. O personagem só se move quando você escolher uma direção.</p><button class="primary" id="play">Começar partida</button><button class="sub" id="resume" hidden>Continuar</button></div></div>
 </div>
 <div class="actions"><button id="pause">Pausar</button><button id="restart">Reiniciar</button><button id="sound">Som: ligado</button></div>
-<div class="settings">Dificuldade <select id="difficulty"><option value="easy">Tranquila</option><option value="normal" selected>Clássica</option><option value="hard">Desafio</option></select></div>
+<div class="settings"><span>Ritmo da partida</span><select id="difficulty"><option value="easy" selected>Tranquila</option><option value="normal">Clássica</option><option value="hard">Desafio</option></select></div>
 
 </section>
 <aside class="panel side">
 <section><h2>Hall da fama</h2><ol class="ranking" id="ranking"></ol><p class="aside-copy">Os cinco melhores resultados ficam guardados neste navegador.</p></section>
 <section><h2>Itens do labirinto</h2><div class="legend"><span><i class="dot"></i> Ponto: +10</span><span><i class="dot power"></i> Super ponto: +50</span><span><i class="dot ghost"></i> Fantasma vulnerável: +200</span></div><h2>Estratégia</h2><p class="aside-copy">Os super pontos deixam os fantasmas vulneráveis por alguns instantes. Cada fase aumenta o ritmo. Os fantasmas tentam cercar você: mude de direção e use os corredores a seu favor.</p></section>
 </aside>
-</div><footer class="foot">NEON MAZE ARCADE · Projeto independente de jogo para navegador</footer>
+</div><footer class="foot">DOCE ARCADE · Um clássico para jogar no seu ritmo</footer>
 </main>
 <script>
 (()=>{
@@ -72,12 +72,12 @@ const BASE=[
 ].map(s=>s.replaceAll(' ','#'));
 const DIR={left:{x:-1,y:0},right:{x:1,y:0},up:{x:0,y:-1},down:{x:0,y:1}};
 const OPP={left:'right',right:'left',up:'down',down:'up'};
-const SPEED={easy:7,normal:5,hard:4};
+const SPEED={easy:14,normal:12,hard:10};
 let grid,player,ghosts,score=0,lives=3,level=1,state='menu',power=0,frame=0,sound=true,audio=null,stepCounter=0;
 let best=Number(localStorage.getItem('neonPacmanBest')||0);
 function cloneMap(){return BASE.map(row=>row.split(''))}
 function resetActors(){
- player={x:9,y:16,dir:'left',next:'left',mouth:0};
+ player={x:9,y:16,dir:null,next:null,mouth:0};
  ghosts=[
   {x:9,y:9,dir:'left',color:'#ff9fbd',mode:0},
   {x:8,y:10,dir:'up',color:'#9de4df',mode:1},
@@ -150,15 +150,17 @@ function ghostMove(g){
 function loseLife(){
  lives--;hud();tone(100,.28);
  if(lives<=0){finish();return}
- player.x=9;player.y=16;player.dir='left';player.next='left';
+ player.x=9;player.y=16;player.dir=null;player.next=null;
  ghosts[0].x=9;ghosts[0].y=9;ghosts[1].x=8;ghosts[1].y=10;ghosts[2].x=10;ghosts[2].y=10;ghosts[3].x=9;ghosts[3].y=11;
  power=0;
 }
 function remaining(){return grid.some(row=>row.some(c=>c==='.'||c==='o'))}
 function update(){
  if(state!=='playing')return;
+ // A partida fica aguardando a primeira direção: jogador e fantasmas não andam sozinhos.
+ if(!player.next&&!player.dir)return;
  frame++;stepCounter++;
- const pace=Math.max(2,SPEED[$('difficulty').value]-Math.floor((level-1)/3));
+ const pace=Math.max(8,SPEED[$('difficulty').value]-Math.floor((level-1)/3));
  if(stepCounter<pace)return;stepCounter=0;
  player.mouth=(player.mouth+1)%10;
  if(!tryMove(player,player.next))tryMove(player,player.dir);else player.dir=player.next;
