@@ -75,10 +75,10 @@ function cloneMap(){return BASE.map(row=>row.split(''))}
 function resetActors(){
  player={x:9,y:16,prevX:9,prevY:16,dir:null,next:null,mouth:0};
  ghosts=[
-  {x:9,y:9,prevX:9,prevY:9,dir:'left',color:'#ff0000',personality:'chaser'},
-  {x:8,y:10,prevX:8,prevY:10,dir:'up',color:'#ffb8ff',personality:'ambusher'},
-  {x:10,y:10,prevX:10,prevY:10,dir:'down',color:'#00ffff',personality:'flanker'},
-  {x:9,y:11,prevX:9,prevY:11,dir:'left',color:'#ffb852',personality:'shy'}
+  {x:9,y:9,prevX:9,prevY:9,dir:'left',color:'#ff0000',personality:'chaser',tick:0},
+  {x:8,y:10,prevX:8,prevY:10,dir:'up',color:'#ffb8ff',personality:'ambusher',tick:1},
+  {x:10,y:10,prevX:10,prevY:10,dir:'down',color:'#00ffff',personality:'flanker',tick:0},
+  {x:9,y:11,prevX:9,prevY:11,dir:'left',color:'#ffb852',personality:'shy',tick:1}
  ];
 }
 function newBoard(){grid=cloneMap();resetActors();power=0;stepCounter=0}
@@ -132,6 +132,10 @@ function ghostTarget(g){
 }
 function ghostMove(g){
  g.prevX=g.x;g.prevY=g.y;
+ g.tick=(g.tick||0)+1;
+ const ghostInterval=$('difficulty').value==='hard'?1:2;
+ if(g.tick<ghostInterval)return;
+ g.tick=0;
  let options=Object.keys(DIR).filter(d=>!wall(g.x+DIR[d].x,g.y+DIR[d].y));
  if(options.length>1)options=options.filter(d=>d!==OPP[g.dir]);
  if(!options.length)return;
@@ -149,7 +153,7 @@ function loseLife(){
  lives--;hud();tone(100,.28);
  if(lives<=0){finish();return}
  player.x=9;player.y=16;player.prevX=9;player.prevY=16;player.dir=null;player.next=null;
- ghosts[0].x=9;ghosts[0].y=9;ghosts[1].x=8;ghosts[1].y=10;ghosts[2].x=10;ghosts[2].y=10;ghosts[3].x=9;ghosts[3].y=11;ghosts.forEach(g=>{g.prevX=g.x;g.prevY=g.y});
+ ghosts[0].x=9;ghosts[0].y=9;ghosts[1].x=8;ghosts[1].y=10;ghosts[2].x=10;ghosts[2].y=10;ghosts[3].x=9;ghosts[3].y=11;ghosts.forEach(g=>{g.prevX=g.x;g.prevY=g.y;g.tick=0});
  power=0;
 }
 function remaining(){return grid.some(row=>row.some(c=>c==='.'||c==='o'))}
@@ -162,23 +166,22 @@ function update(){
  if(stepCounter<pace)return;stepCounter=0;
  player.mouth=(player.mouth+1)%10;
  player.prevX=player.x;player.prevY=player.y;
- if(player.next&&tryMove(player,player.next))player.dir=player.next;
+ if(player.next&&tryMove(player,player.next)){player.dir=player.next;player.next=null}
  else if(player.dir)tryMove(player,player.dir);
  const cell=grid[player.y][player.x];
  if(cell==='.'||cell==='o'){score+=cell==='o'?50:10;grid[player.y][player.x]=' ';if(cell==='o'){power=70;tone(880,.12)}else tone(500,.025);if(score>best){best=score;localStorage.setItem('neonPacmanBest',String(best))}hud()}
- for(let i=0;i<ghosts.length;i++){const g=ghosts[i];if(frame%(i===0?1:1)===0)ghostMove(g)}
- if(power>0)power--;
- // Detecta colisão na mesma casa e quando Pac-Man e fantasma cruzam no mesmo passo.
+ for(const g of ghosts)ghostMove(g);
+ // Detecta colisão na mesma casa ou troca de posições no mesmo passo.
  for(const g of ghosts){
   const sameTile=g.x===player.x&&g.y===player.y;
-  const enteredGhostTile=player.x===g.prevX&&player.y===g.prevY;
   const crossedPaths=player.prevX===g.x&&player.prevY===g.y&&player.x===g.prevX&&player.y===g.prevY;
-  if(sameTile||enteredGhostTile||crossedPaths){
+  if(sameTile||crossedPaths){
    if(power>0){
     score+=200;g.x=9;g.y=9;g.prevX=9;g.prevY=9;tone(180,.1);hud();
    }else{loseLife();return}
   }
  }
+ if(power>0)power--;
  if(!remaining()){level++;newBoard();hud();tone(740,.2)}
 }
 function movementProgress(){const pace=Math.max(6,SPEED[$('difficulty').value]-Math.floor((level-1)/4));return Math.min(1,stepCounter/pace)}
@@ -187,13 +190,11 @@ function drawPacman(){
  const angle={right:0,down:Math.PI/2,left:Math.PI,up:-Math.PI/2}[player.dir]||0;
  const opening=player.dir?(.04+Math.abs(Math.sin(player.mouth*Math.PI/5))*.34):.04;
  ctx.save();ctx.translate(x,y);ctx.rotate(angle);
- const gold=ctx.createRadialGradient(-3,-5,1,0,0,12);
- gold.addColorStop(0,'#fff98a');gold.addColorStop(.42,'#ffe900');gold.addColorStop(1,'#e5a900');
- ctx.shadowColor='#ffe900';ctx.shadowBlur=8;ctx.fillStyle=gold;
+ ctx.shadowBlur=0;ctx.fillStyle='#ffff00';
  ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,10.5,opening,Math.PI*2-opening);ctx.closePath();ctx.fill();
  ctx.shadowBlur=0;
  // Small glossy highlight gives the classic character a more dimensional finish.
- ctx.fillStyle='rgba(255,255,220,.72)';ctx.beginPath();ctx.ellipse(-3.5,-6,2.5,1.15,-.45,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='rgba(255,255,255,.16)';ctx.beginPath();ctx.ellipse(-3.5,-6,2.2,1,-.45,0,Math.PI*2);ctx.fill();
  ctx.restore();
 }
 function drawGhost(g){
@@ -203,10 +204,8 @@ function drawGhost(g){
  const shade=frightened?'#172b9b':g.personality==='chaser'?'#b40025':g.personality==='ambusher'?'#c43b92':g.personality==='flanker'?'#008eaa':'#c87516';
  ctx.save();
  // Soft outer glow and shaded, rounded ghost silhouette.
- ctx.shadowColor=body;ctx.shadowBlur=frightened?8:4;
- const grad=ctx.createLinearGradient(x-8,y-10,x+8,y+10);
- grad.addColorStop(0,body);grad.addColorStop(1,shade);
- ctx.fillStyle=grad;
+ ctx.shadowBlur=0;
+ ctx.fillStyle=body;
  ctx.beginPath();ctx.moveTo(x-9,y+8);ctx.lineTo(x-9,y-1);
  ctx.bezierCurveTo(x-9,y-7,x-5,y-11,x,y-11);
  ctx.bezierCurveTo(x+5,y-11,x+9,y-7,x+9,y-1);
@@ -218,7 +217,7 @@ function drawGhost(g){
  ctx.quadraticCurveTo(x-7,y+10-wobble,x-9,y+8);
  ctx.closePath();ctx.fill();ctx.shadowBlur=0;
  // Glossy highlight on the dome.
- ctx.fillStyle='rgba(255,255,255,.28)';
+ ctx.fillStyle='rgba(255,255,255,.10)';
  ctx.beginPath();ctx.ellipse(x-3.5,y-6,3.2,1.6,-.45,0,Math.PI*2);ctx.fill();
  if(frightened){
   ctx.strokeStyle=blink?'#244be8':'#fff';ctx.lineWidth=1.4;
@@ -237,7 +236,7 @@ function draw(){
  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
   const c=grid[y][x],px=x*TILE,py=y*TILE;
   if(c==='#'){ctx.fillStyle='#08085c';ctx.fillRect(px+1,py+1,TILE-2,TILE-2);ctx.strokeStyle='#2121de';ctx.lineWidth=1.6;ctx.strokeRect(px+2,py+2,TILE-4,TILE-4)}
-  else if(c==='.'||c==='o'){ctx.beginPath();ctx.fillStyle=c==='o'?'#fff':'#fff';ctx.shadowColor=c==='o'?'#fff':'transparent';ctx.shadowBlur=c==='o'?8:0;ctx.arc(px+12,py+12,c==='o'?5:2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
+  else if(c==='.'||c==='o'){ctx.beginPath();ctx.fillStyle='#fff';ctx.arc(px+12,py+12,c==='o'?4.5:2,0,Math.PI*2);ctx.fill()}
  }
  drawPacman();ghosts.forEach(drawGhost);
 }
